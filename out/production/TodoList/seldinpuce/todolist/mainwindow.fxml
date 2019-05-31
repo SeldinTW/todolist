@@ -17,7 +17,7 @@
                 </Menu>
             </MenuBar>
             <ToolBar>
-                <HBox>
+                <HBox spacing="10">
                     <Button onAction="#showNewItemDialog">
                         <tooltip>
                             <Tooltip text="Add a New Todo Item"/>
