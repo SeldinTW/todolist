@@ -3,7 +3,7 @@ package seldinpuce.todolist.datamodel;
 import java.time.LocalDate;
 
 /**
- * Created by timbuchalka on 17/04/2016.
+ * Created by seldinpuce on 30/05/2019.
  */
 public class TodoItem {
 

@@ -1,5 +1,6 @@
 package seldinpuce.todolist;
 
+import javafx.collections.transformation.SortedList;
 import seldinpuce.todolist.datamodel.TodoData;
 import seldinpuce.todolist.datamodel.TodoItem;
 import javafx.beans.value.ChangeListener;
@@ -18,12 +19,10 @@ import javafx.util.Callback;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Optional;
 
 public class Controller {
-
-    private List<TodoItem> todoItems;
 
     @FXML
     private ListView<TodoItem> todoListView;
@@ -45,28 +44,22 @@ public class Controller {
 
         listContextMenu = new ContextMenu();
         MenuItem deleteMenuItem = new MenuItem("Delete");
-        deleteMenuItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-                deleteItem(item);
-            }
+        deleteMenuItem.setOnAction(event -> {
+            TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+            deleteItem(item);
         });
 
         listContextMenu.getItems().addAll(deleteMenuItem);
-        todoListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<TodoItem>() {
-            @Override
-            public void changed(ObservableValue<? extends TodoItem> observable, TodoItem oldValue, TodoItem newValue) {
-                if (newValue != null) {
-                    TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-                    itemDetailsTextArea.setText(item.getDetails());
-                    DateTimeFormatter df = DateTimeFormatter.ofPattern("MMMM d, yyyy"); // "d M yy");
-                    deadlineLabel.setText(df.format(item.getDeadline()));
-                }
+        todoListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+                itemDetailsTextArea.setText(item.getDetails());
+                DateTimeFormatter df = DateTimeFormatter.ofPattern("MMMM d, yyyy"); // "d M yy"
+                deadlineLabel.setText(df.format(item.getDeadline()));
             }
         });
-
-        todoListView.setItems(TodoData.getInstance().getTodoItems());
+        SortedList<TodoItem> sortedList = new SortedList<>(TodoData.getInstance().getTodoItems(), Comparator.comparing(TodoItem::getDeadline));
+        todoListView.setItems(sortedList);
         todoListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         todoListView.getSelectionModel().selectFirst();
 
@@ -85,7 +78,7 @@ public class Controller {
                             if (item.getDeadline().isBefore(LocalDate.now().plusDays(1))) {
                                 setTextFill(Color.RED);
                             } else if (item.getDeadline().equals(LocalDate.now().plusDays(1))) {
-                                setTextFill(Color.BROWN);
+                                setTextFill(Color.ORANGE);
                             }
                         }
                     }
@@ -146,14 +139,14 @@ public class Controller {
         }
     }
 
-    @FXML
-    public void handleClickListView() {
-        TodoItem item = todoListView.getSelectionModel().getSelectedItem();
-        itemDetailsTextArea.setText(item.getDetails());
-        deadlineLabel.setText(item.getDeadline().toString());
-    }
+//    @FXML
+//    public void handleClickListView() {
+//        TodoItem item = todoListView.getSelectionModel().getSelectedItem();
+//        itemDetailsTextArea.setText(item.getDetails());
+//        deadlineLabel.setText(item.getDeadline().toString());
+//    }
 
-    public void deleteItem(TodoItem item) {
+    private void deleteItem(TodoItem item) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Delete Todo Item");
         alert.setHeaderText("Delete item: " + item.getShortDescription());

@@ -10,7 +10,7 @@ import javafx.scene.control.TextField;
 import java.time.LocalDate;
 
 /**
- * Created by timbuchalka on 8/05/2016.
+ * Created by seldinpuce on 30/05/2019.
  */
 public class DialogController {
 
