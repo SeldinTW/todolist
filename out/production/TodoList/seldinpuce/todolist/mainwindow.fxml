@@ -12,7 +12,7 @@
                     <items>
                         <MenuItem text="New..." onAction="#showNewItemDialog"/>
                         <SeparatorMenuItem/>
-                        <MenuItem text="Exit"/>
+                        <MenuItem text="Exit" onAction="#handleExit"/>
                     </items>
                 </Menu>
             </MenuBar>
@@ -28,6 +28,11 @@
                             </ImageView>
                         </graphic>
                     </Button>
+                    <ToggleButton fx:id="filterToggleButton" text="Today's Items" onAction="#handleFilterButton">
+                        <tooltip>
+                            <Tooltip text="Button Down: Show Today's items only. Button Up: Show all items"/>
+                        </tooltip>
+                    </ToggleButton>
                 </HBox>
             </ToolBar>
         </VBox>
