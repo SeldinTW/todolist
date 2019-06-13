@@ -1,2 +1,2 @@
 # todolist
-Simple todo list application written in java
+Simple JavaFX todo list application
